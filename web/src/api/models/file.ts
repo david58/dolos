@@ -15,6 +15,7 @@ export interface FileIndeterminate {
     timestamp?: Date;
     fullName?: string;
     labels?: string;
+    disqualified?: boolean;
   };
 
   pseudo: {

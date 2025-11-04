@@ -105,7 +105,7 @@ export const useFileStore = defineStore("file", () => {
   // Functions
 
   async function hydrate(): Promise<void> {
-    const parsed = parse(await fetch());
+    const parsed = await parse(await fetchCsv());
     filesById.value = parsed.files;
     filesActiveById.value = parsed.files;
     ignoredFile.value = parsed.ignoredFile;
@@ -116,21 +116,21 @@ export const useFileStore = defineStore("file", () => {
     hydrated.value = true;
   }
 
-  async function fetch(
+  async function fetchCsv(
     url: string = apiStore.url + "/files.csv"
   ): Promise<any[]> {
     return await parseCsv(url);
   }
 
+  async function fetchDisqualified(
+    url: string = apiStore.url + "/disqualified"
+  ): Promise<any> {
+    const data = await fetch(url);
+    return await data.json();
+  }
+
   // Parse the files from a CSV string.
-  function parse(fileData: any[]): {
-    ignoredFile?: File;
-    files: File[];
-    labels: Legend;
-    hasLabels: boolean;
-    hasUnlabeled: boolean;
-    hasTimestamps: boolean;
-  } {
+  async function parse(fileData: any[]): Promise<{ ignoredFile?: File; files: File[]; labels: Legend; hasLabels: boolean; hasUnlabeled: boolean; hasTimestamps: boolean; }> {
     const randomNameGenerator = (): string =>
       uniqueNamesGenerator({
         dictionaries: [names],
@@ -152,6 +152,10 @@ export const useFileStore = defineStore("file", () => {
     let hasLabels = false;
     let hasUnlabeled = false;
     let hasTimestamps = false;
+    
+
+    const disqualifiedJson =await fetchDisqualified()
+    const disqualified = disqualifiedJson.users
 
     for (const row of fileData) {
       const file = row as File;
@@ -161,6 +165,11 @@ export const useFileStore = defineStore("file", () => {
       extra.timestamp = extra.createdAt && new Date(extra.createdAt);
       hasTimestamps = hasTimestamps || !!extra.timestamp;
       file.ignored = row.ignored == "true"
+      extra.disqualified=false
+      if (disqualified.includes(extra.fullName)){
+        console.log("extra", extra.fullName)
+        extra.disqualified=true
+      }
       file.extra = extra;
       file.ast = JSON.parse(row.ast);
       file.mapping = JSON.parse(row.mapping);

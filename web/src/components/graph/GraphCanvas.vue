@@ -139,6 +139,7 @@ watchEffect(() => {
     name: file.extra.fullName ?? file.shortPath,
     timestamp: file.extra.timestamp,
     color: file.label.color,
+    highlight: file.extra.disqualified ? '#f00': undefined,
   }));
 
   const clusters: Group[] = [];

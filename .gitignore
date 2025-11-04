@@ -17,3 +17,5 @@ dolos-report-*/
 node_modules/
 vetur.config.js
 yarn-error.log
+web/dolos/
+web/public/data

@@ -223,6 +223,9 @@ export class FingerprintIndex {
     const entries = Array.from(this.files.values());
     for (let i = 0; i < entries.length; i++) {
       for (let j = i + 1; j < entries.length; j++) {
+        // if (entries[i].file.extra && entries[i].file.extra?.fullName == entries[j].file.extra?.fullName){
+        //   continue;
+        // }
         pairs.push(new Pair(entries[i], entries[j]));
       }
     }

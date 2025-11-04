@@ -11,7 +11,7 @@
         class="file-info-subtitle text-medium-emphasis"
       >
         <v-icon size="small">mdi-account-outline</v-icon>
-        <span>{{ props.file.extra.fullName }}</span>
+        <a :href="`https://zenit.ksp.sk/api/contest/zenit24kk/disqualifi/${props.file.extra.fullName}`"><span style="color:red">OZNAČIŤ {{ props.file.extra.fullName }}</span></a>
       </div>
 
       <div

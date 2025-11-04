@@ -28,7 +28,12 @@ export function useAppMode() {
     if (import.meta.env.VITE_MODE === "server") {
       return reportUrl.value ? `${reportUrl.value}/data` : undefined;
     } else {
-      return DATA_URL;
+      const urlParams = new URLSearchParams(window.location.search);
+      const dataPath = urlParams.get('data');
+      const dataUrl = `${window.location.protocol}//${window.location.host}${dataPath}`
+      console.log(dataUrl);
+      // return DATA_URL;
+      return dataUrl;
     }
   });
 

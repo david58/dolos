@@ -41,6 +41,7 @@ export interface Node {
   id: number;
   name: string;
   color: string;
+  highlight?: string;
   timestamp?: Date;
 }
 
@@ -62,12 +63,14 @@ export class D3Node implements Node {
   neighbors: D3Node[] = [];
   edges: D3Edge[]= [];
   color: string;
+  highlight?: string;
   timestamp?: Date;
 
   constructor(node: Node) {
     this.id = node.id;
     this.name = node.name;
     this.color = node.color;
+    this.highlight = node.highlight;
     this.timestamp = node.timestamp;
   }
 }

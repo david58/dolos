@@ -48,7 +48,7 @@ export function draw(context: CanvasRenderingContext2D, data: Data): void {
     context.fillStyle = node.color;
     context.fill();
     context.lineWidth = 1;
-    context.strokeStyle = data.selectedNode == node ? "#000" : "#fff";
+    context.strokeStyle = data.selectedNode == node ? "#000" : (node.highlight ?? "#fff");
     context.stroke();
   }
 
