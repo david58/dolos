@@ -37,10 +37,17 @@ export function useAppMode() {
     }
   });
 
+  const disqualifiedUrl = computed(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const disqualifiedUrl = urlParams.get('disqualified');
+    return disqualifiedUrl;
+  });
+
   return {
     appMode,
     isServer,
     reportUrl,
     dataUrl,
+    disqualifiedUrl
   };
 }

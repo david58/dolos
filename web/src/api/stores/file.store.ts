@@ -123,10 +123,16 @@ export const useFileStore = defineStore("file", () => {
   }
 
   async function fetchDisqualified(
-    url: string = apiStore.url + "/disqualified"
+    url: string | null = apiStore.disqualifiedUrl
   ): Promise<any> {
-    const data = await fetch(url);
-    return await data.json();
+    try {
+      if (!url) throw new Error("Disqualified URL is not set");
+      const data = await fetch(url);
+      return await data.json();
+    } catch (error) {
+      console.error("Error fetching disqualified users:", error);
+      return { users: [] };
+    }
   }
 
   // Parse the files from a CSV string.
@@ -154,7 +160,7 @@ export const useFileStore = defineStore("file", () => {
     let hasTimestamps = false;
     
 
-    const disqualifiedJson =await fetchDisqualified()
+    const disqualifiedJson = await fetchDisqualified()
     const disqualified = disqualifiedJson.users
 
     for (const row of fileData) {

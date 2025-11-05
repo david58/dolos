@@ -11,7 +11,8 @@
         class="file-info-subtitle text-medium-emphasis"
       >
         <v-icon size="small">mdi-account-outline</v-icon>
-        <a :href="`https://zenit.ksp.sk/api/contest/zenit24kk/disqualifi/${props.file.extra.fullName}`"><span style="color:red">OZNAČIŤ {{ props.file.extra.fullName }}</span></a>
+        <a v-if="disqualifyUrl" :href="disqualifyUrl"><span style="color:red">OZNAČIŤ {{ props.file.extra.fullName }}</span></a>
+        <span v-else> {{ props.file.extra.fullName }}</span>
       </div>
 
       <div
@@ -50,6 +51,7 @@ import { File } from "@/api/models";
 import { useFileStore } from "@/api/stores";
 import { storeToRefs } from "pinia";
 import { computed } from "vue";
+import { useRoute } from "vue-router";
 
 interface Props {
   file: File;
@@ -60,6 +62,24 @@ const { legend } = storeToRefs(useFileStore());
 const labelColor = computed(
   () => legend.value[props.file?.extra?.labels ?? ""].color ?? ""
 );
+
+const route = useRoute();
+
+const disqualifyUrl = computed(() => {
+  const base = route.query.disqualify;
+  
+  const fullName = props.file.extra.fullName || "";
+  if (!base) return "";
+
+  if (typeof base === "string" && base.includes("?")) {
+    const [path, query] = base.split("?");
+    return (path || "") + "/" + encodeURIComponent(fullName) + "?" + (query || "");
+  }
+  if (typeof base === "string") {
+    return base+ "/" + encodeURIComponent(fullName);
+  }
+  return "";
+});
 </script>
 
 <style lang="scss" scoped>

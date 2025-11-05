@@ -63,7 +63,7 @@ export const useApiStore = defineStore("api", () => {
     loading.value = false;
   };
 
-  const { dataUrl } = useAppMode();
+  const { dataUrl, disqualifiedUrl } = useAppMode();
 
   // Re-hydrate the API stores when the anonymous value changes.
   watch(isAnonymous, () => fileStore.anonymize());
@@ -76,6 +76,7 @@ export const useApiStore = defineStore("api", () => {
 
   return {
     url: dataUrl,
+    disqualifiedUrl,
     isAnonymous,
     loading,
     loadingText,
